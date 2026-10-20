@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life to desire</title>
+    <style>
+        :root {
+            --bg: #f7f3ee;
+            --card: #fffbf5;
+            --main: #8c5830;
+            --text: #4a3b32;
+            --border: #e3d5c6;
+            --header: #5c4033;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        header {
+            background-color: var(--header);
+            color: #f4ece1;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--main);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        header h1 { margin: 0; font-size: 24px; font-weight: normal; }
+        
+        nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        nav button.nav-btn { 
+            color: #f4ece1; 
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: sans-serif; 
+            font-size: 14px; 
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        nav button.nav-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        nav button.nav-btn.active { 
+            background: var(--main); 
+            font-weight: bold;
+            border-color: #fff;
+        }
+
+        .container { max-width: 900px; margin: 25px auto; padding: 0 15px; }
+        
+        .panel {
+            background: var(--card);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: sans-serif;
+            font-size: 13px;
+        }
+        .panel-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .panel-row:last-child { margin-bottom: 0; }
+
+        section {
+            background: var(--card);
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+        }
+        h2 { color: var(--main); margin: 0; font-size: 22px; }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0 12px 0;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: inherit;
+            background: #ffffff;
+        }
+        textarea { height: 90px; resize: vertical; }
+        
+        button.action-btn {
+            background-color: var(--main);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        button.action-btn:hover { opacity: 0.9; }
+        button.btn-sm { padding: 4px 8px; font-size: 12px; }
+        button.btn-del { background-color: #b85c50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button.btn-del:hover { background-color: #9c4a3f; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 15px; margin-top: 15px; }
+        .card-box {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-box img { width: 100%; height: 160px; object-fit: cover; border-radius: 5px; margin-bottom: 10px; }
+
+        .page-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <header id="topHeader">
+        <h1>Life to desire</h1>
+        <nav id="navLinks"></nav>
+    </header>
+
+    <div class="container">
+        <!-- Personalização de Cores -->
+        <div class="panel">
+            <div class="panel-row">
+                <span>🎨 <b>Personalizar Ambiente:</b></span>
+                <label>Menu: <input type="color" id="cHeader" value="#5c4033" onchange="mudaCor()"></label>
+                <label>Destaque: <input type="color" id="cMain" value="#8c5830" onchange="mudaCor()"></label>
+                <label>Fundo: <input type="color" id="cBg" value="#f7f3ee" onchange="mudaCor()"></label>
+            </div>
+        </div>
+
+        <!-- Gerenciador e Organizador de Páginas -->
+        <div class="panel">
+            <b style="font-size: 14px; display: block; margin-bottom: 8px;">📑 Criar & Reordenar Páginas:</b>
+            <div class="panel-row">
+                <input type="text" id="novaPaginaNome" placeholder="Nome da nova página (Ex: Magias, Capítulos)..." style="max-width: 300px; margin: 0;">
+                <button class="action-btn" onclick="criarPagina()">+ Criar Página</button>
+            </div>
+            <div id="listaGerenciarPaginas" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;"></div>
+        </div>
+
+        <!-- Área onde exibe a Página Selecionada -->
+        <div id="conteudoSecoes"></div>
+    </div>
+
+    <script>
+        // Estrutura Inicial Segura
+        let paginas = [
+            { id: 'notas', titulo: 'Notas de Leitura', tipo: 'notas', padrao: true },
+            { id: 'personagens', titulo: 'Personagens', tipo: 'midia', padrao: true },
+            { id: 'cenarios', titulo: 'Cenários', tipo: 'midia', padrao: true }
+        ];
+
+        let db = {
+            notas: [],
+            personagens: [],
+            cenarios: []
+        };
+
+        let paginaAtivaId = 'notas';
+
+        // Tentar carregar dados salvos anteriormente se existirem
+        try {
+            let savedPages = localStorage.getItem('life_pages_v4');
+            let savedDb = localStorage.getItem('life_db_v4');
+            if (savedPages) paginas = JSON.parse(savedPages);
+            if (savedDb) db = JSON.parse(savedDb);
+        } catch (e) {
+            console.log('Usando estado padrão.');
+        }
+
+        function salvarTudo() {
+            try {
+                localStorage.setItem('life_pages_v4', JSON.stringify(paginas));
+                localStorage.setItem('life_db_v4', JSON.stringify(db));
+            } catch (e) {
+                console.log('Erro ao salvar no storage');
+            }
+            desenhar();
+        }
+
+        function mudaCor() {
+            let h = document.getElementById('cHeader').value;
+            let m = document.getElementById('cMain').value;
+            let b = document.getElementById('cBg').value;
+            document.getElementById('topHeader').style.backgroundColor = h;
+            document.body.style.backgroundColor = b;
+            document.documentElement.style.setProperty('--main', m);
+        }
+
+        function abrirPagina(id) {
+            paginaAtivaId = id;
+            desenhar();
+        }
+
+        function criarPagina() {
+            let input = document.getElementById('novaPaginaNome');
+            let nome = input.value.trim();
+            if(!nome) {
+                alert('Por favor, digite o nome para a nova página!');
+                return;
+            }
+            let id = 'pag_' + Date.now();
+            paginas.push({ id: id, titulo: nome, tipo: 'midia', padrao: false });
+            db[id] = [];
+            paginaAtivaId = id;
+            input.value = '';
+            salvarTudo();
+        }
+
+        function moverPagina(index, direcao) {
+            let novoIndex = index + direcao;
+            if (novoIndex < 0 || novoIndex >= paginas.length) return;
+            let temp = paginas[index];
+            paginas[index] = paginas[novoIndex];
+            paginas[novoIndex] = temp;
+            salvarTudo();
+        }
+
+        function excluirPagina(id) {
+            if(!confirm('Deseja realmente excluir esta página e todos os registros nela?')) return;
+            paginas = paginas.filter(p => p.id !== id);
+            delete db[id];
+            if(paginaAtivaId === id) {
+                paginaAtivaId = paginas[0] ? paginas[0].id : 'notas';
+            }
+            salvarTudo();
+        }
+
+        function addConteudo(pageId) {
+            let tit = document.getElementById('tit_' + pageId).value.trim();
+            let subInput = document.getElementById('sub_' + pageId);
+            let sub = subInput ? subInput.value.trim() : '';
+            let txt = document.getElementById('txt_' + pageId).value.trim();
+            let fileInput = document.getElementById('img_' + pageId);
+            let file = fileInput ? fileInput.files[0] : null;
+
+            if(!tit) return alert('Informe o título / nome.');
+
+            if(!db[pageId]) db[pageId] = [];
+
+            if(file) {
+                let r = new FileReader();
+                r.onload = function(e) {
+                    db[pageId].unshift({ id: Date.now(), tit, sub, txt, img: e.target.result });
+                    salvarTudo();
+                };
+                r.readAsDataURL(file);
+            } else {
+                db[pageId].unshift({ id: Date.now(), tit, sub, txt, img: '' });
+                salvarTudo();
+            }
+        }
+
+        function delItem(pageId, itemId) {
+            if(db[pageId]) {
+                db[pageId] = db[pageId].filter(x => x.id !== itemId);
+                salvarTudo();
+            }
+        }
+
+        function desenhar() {
+            if (!paginas.find(p => p.id === paginaAtivaId)) {
+                paginaAtivaId = paginas[0] ? paginas[0].id : 'notas';
+            }
+
+            // Renderizar Menu
+            document.getElementById('navLinks').innerHTML = paginas.map(p => `
+                <button class="nav-btn ${p.id === paginaAtivaId ? 'active' : ''}" onclick="abrirPagina('${p.id}')">
+                    ${p.titulo}
+                </button>
+            `).join('');
+
+            // Renderizar Gerenciador
+            document.getElementById('listaGerenciarPaginas').innerHTML = paginas.map((p, idx) => `
+                <div class="page-item">
+                    <b>${p.titulo}</b>
+                    <button class="action-btn btn-sm" onclick="moverPagina(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>◄</button>
+                    <button class="action-btn btn-sm" onclick="moverPagina(${idx}, 1)" ${idx === paginas.length - 1 ? 'disabled' : ''}>►</button>
+                    ${!p.padrao ? `<button class="btn-del btn-sm" onclick="excluirPagina('${p.id}')">✕</button>` : ''}
+                </div>
+            `).join('');
+
+            // Renderizar Seção Ativa
+            let p = paginas.find(item => item.id === paginaAtivaId);
+            let itens = db[p.id] || [];
+            let htmlHTML = '';
+
+            if(p.id === 'notas') {
+                htmlHTML = `
+                    <section>
+                        <div class="section-header">
+                            <h2>${p.titulo}</h2>
+                        </div>
+                        <input type="text" id="tit_${p.id}" placeholder="Título do Livro">
+                        <input type="text" id="sub_${p.id}" placeholder="Autor(a)">
+                        <textarea id="txt_${p.id}" placeholder="Suas impressões, citações e anotações..."></textarea>
+                        <button class="action-btn" onclick="addConteudo('${p.id}')">Salvar Anotação</button>
+                        
+                        <div style="margin-top: 15px;">
+                            ${itens.length === 0 ? '<p style="color:#888; font-style:italic;">Nenhuma anotação salva ainda.</p>' : ''}
+                            ${itens.map(x => `
+                                <div style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:15px; margin-top:12px;">
+                                    <h3 style="margin:0 0 5px 0; color:var(--main);">${x.tit}</h3>
+                                    <small style="color:#776b61; font-family:sans-serif;"><b>Autor:</b> ${x.sub || 'Não informado'}</small>
+                                    <p style="white-space:pre-line; margin:10px 0 0 0;">${x.txt}</p>
+                                    <button class="btn-del btn-sm" style="margin-top:10px; padding:5px 10px;" onclick="delItem('${p.id}',${x.id})">Excluir Nota</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>
+                `;
+            } else {
+                htmlHTML = `
+                    <section>
+                        <div class="section-header">
+                            <h2>${p.titulo}</h2>
+                        </div>
+                        <input type="text" id="tit_${p.id}" placeholder="Nome / Título">
+                        <input type="file" id="img_${p.id}" accept="image/*">
+                        <textarea id="txt_${p.id}" placeholder="Descrição, biografia, características..."></textarea>
+                        <button class="action-btn" onclick="addConteudo('${p.id}')">Salvar em ${p.titulo}</button>
+                        
+                        <div class="grid">
+                            ${itens.length === 0 ? '<p style="color:#888; font-style:italic; grid-column: 1/-1;">Nenhum item cadastrado ainda.</p>' : ''}
+                            ${itens.map(x => `
+                                <div class="card-box">
+                                    <div>
+                                        ${x.img ? `<img src="${x.img}">` : '<div style="height:150px; background:#f0e9e1; border-radius:5px; display:flex; align-items:center; justify-content:center; color:#9c8d82; font-family:sans-serif; margin-bottom:10px; font-size:12px;">Sem imagem</div>'}
+                                        <h3 style="margin:0 0 5px 0; color:var(--main);">${x.tit}</h3>
+                                        <p style="white-space:pre-line; font-size:13px; margin:0; font-family:sans-serif;">${x.txt}</p>
+                                    </div>
+                                    <button class="btn-del btn-sm" style="margin-top:10px; padding:5px 10px;" onclick="delItem('${p.id}',${x.id})">Excluir</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>
+                `;
+            }
+
+            document.getElementById('conteudoSecoes').innerHTML = htmlHTML;
+        }
+
+        desenhar();
+    </script>
+</body>
+</html>
